@@ -31,10 +31,18 @@ extern "C" {
 #include "jody_sort.h"
 #include "version.h"
 
+#ifndef USE_JODY_HASH
 #include "xxhash.h"
+#else
+#include "jody_hash.h"
+#endif /* USE_JODY_HASH */
 
 /* Set hash type (change this if swapping in a different hash function) */
+#ifndef USE_JODY_HASH
  typedef XXH64_hash_t jdupes_hash_t;
+#else
+ typedef jodyhash_t jdupes_hash_t;
+#endif /* USE_JODY_HASH */
 
 /* Some types are different on Windows */
 #ifdef ON_WINDOWS
@@ -136,6 +144,7 @@ extern uint_fast32_t flags, a_flags;
 #define F_NOCHANGECHECK		(1U << 17)
 #define F_NOTRAVCHECK		(1U << 18)
 #define F_SKIPHASH		(1U << 19)
+#define F_BENCHMARKSTOP		(1U << 29)
 #define F_LOUD			(1U << 30)
 #define F_DEBUG			(1U << 31)
 
